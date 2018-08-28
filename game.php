@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game Code</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style type="text/css">
+  *{
+    padding: 0;
+    margin: 0;
+  }
+  table{
+    width: 90%; 
+    margin: 5%;
+    border:2px solid red;
+    border-collapse: collapse;
+  }
+  td{
+    border:2px solid  #333;
+    height: 33vw;
+    width: 33vw;
+    font-size: 70px;
+    text-align: center;
+  }
+  td:hover{
+    background-color: #ccc;
+  }
+  #message{
+    position: absolute;
+    width: 45vw;
+    height: 15vh;
+    background-color: rgba(1,1,1,0.5);
+    margin: 40vh 25vw;
+    border-radius: 4px;
+    padding:5vh 5vw;
+    color: #fff;
+
+  }
+  button{
+    background-color: #fff;
+    border-radius: 3px;
+    border:0;
+    padding: 5px;
+    height: 7vh;
+  }
+}
+</style>
+</head>
+<body>
+  <center>agamebysabinshrestha</center>
+  <div id="message"><p style="height: 10vh;" id="ms">You have won</p>
+    <center ><button onclick="start()">Replay</button></center></div>
+    <table>
+      <tr>
+        <td class="cell" id="0" onclick="focus(0)"></td>
+        <td class="cell" id="1"> </td>
+        <td class="cell" id="2"> </td>
+      </tr>
+      <tr>
+        <td class="cell" id="3"> </td>
+        <td class="cell" id="4"> </td>
+        <td class="cell" id="5"> </td>
+      </tr>
+      <tr>
+        <td class="cell" id="6"> </td>
+        <td class="cell" id="7"> </td>
+        <td class="cell" id="8"> </td>
+      </tr>
+      <div id="end">your wins=<span id="owons"></span>
+        AI wins=<span id="xwons"></span></div>
+        <button onclick="start()">Reset</button>
+      </table>
+      <div style="text-align: center;">values of human:<span id="val"></span></div>
+      <div style="text-align: center;">values of ai<span id="ai"></span></div>
+      <div style="text-align: center;">empty cells for ai<span id="em"></span></div>
+      <div style="text-align: center;">
+        <span id="tests">tests</span>><span id="lab">lab</span>
+      </div>
+    </body>
+    <script type="text/javascript">
+      start();
+      var os= new Array;
+      var owons=0;
+      var xwons=0;
+      var placefrai="";
+      var whereisai="";
+      var gameboard;
+      var p = 'x';
+      var c = 'o';
+      var idea;
+      var cells = document.getElementsByClassName("cell"); 
+
+      function start(){
+        os="";
+        placefrai="";
+        whereisai="";
+        gameboard = Array.from(Array(9).keys());
+        document.getElementById("message").style.display="none";
+        for (var i = 0; i <= 8; i++) {
+          document.getElementById(i).innerHTML =" ";
+          document.getElementById(0).innerHTML ="x";
+          document.getElementById(1).innerHTML ="x";
+          document.getElementById(2).innerHTML ="x";
+          document.getElementById(6).innerHTML ="o";
+          document.getElementById(7).innerHTML ="o";
+          document.getElementById(8).innerHTML ="o";
+          document.getElementById(i).addEventListener("click", focus);
+          document.getElementById(i).style.backgroundColor="#fff";
+        }
+      }
+      function focus(argument,player) {
+        if (this.innerHTML=="x") {
+          this.style.backgroundColor="red";
+        }else if(this.innerHTML==" "){
+          this.style.backgroundColor="red";
+        }else{
+          this.innerHTML=" ";
+         if (this.id==0) {
+          document.getElementById(1).addEventListener("click",done);
+          document.getElementById(3).addEventListener("click",done);
+         }
+         if (this.id==1) {
+          document.getElementById(0).addEventListener("click",done);
+          document.getElementById(2).addEventListener("click",done);
+          document.getElementById(3).addEventListener("click",done);
+          document.getElementById(4).addEventListener("click",done);
+         }
+          if (this.id==2) {
+          document.getElementById(1).addEventListener("click",done);
+          document.getElementById(4).addEventListener("click",done);
+          document.getElementById(5).addEventListener("click",done);
+           }
+           if (this.id==3) {
+          document.getElementById(0).addEventListener("click",done);
+          document.getElementById(1).addEventListener("click",done);
+          document.getElementById(4).addEventListener("click",done);
+          document.getElementById(6).addEventListener("click",done);
+           }
+         if (this.id==4) {
+          document.getElementById(0).addEventListener("click", done);
+          document.getElementById(1).addEventListener("click", done);
+          document.getElementById(2).addEventListener("click", done);
+          document.getElementById(3).addEventListener("click", done);
+          document.getElementById(5).addEventListener("click", done);
+          document.getElementById(6).addEventListener("click", done);
+          document.getElementById(7).addEventListener("click", done);
+          document.getElementById(8).addEventListener("click", done);
+         }
+         if (this.id==5) {
+          document.getElementById(8).addEventListener("click", done);
+          document.getElementById(1).addEventListener("click", done);
+          document.getElementById(2).addEventListener("click", done);
+          document.getElementById(4).addEventListener("click", done);
+          document.getElementById(7).addEventListener("click", done);
+         }
+         if (this.id==6) {
+          document.getElementById(3).addEventListener("click", done);
+          document.getElementById(4).addEventListener("click", done);
+          document.getElementById(7).addEventListener("click", done);
+         }
+         if (this.id==7) {
+          document.getElementById(3).addEventListener("click", done);
+          document.getElementById(4).addEventListener("click", done);
+          document.getElementById(5).addEventListener("click", done);
+          document.getElementById(6).addEventListener("click", done);
+          document.getElementById(8).addEventListener("click", done);
+         }
+         if (this.id==8) {
+          document.getElementById(4).addEventListener("click", done);
+          document.getElementById(5).addEventListener("click", done);
+          document.getElementById(7).addEventListener("click", done);
+         }
+         for (var i =0; i <= 8; i++) {
+            document.getElementById(i).style.backgroundColor="#fff";
+            document.getElementById(i).removeEventListener("click", focus);
+            if (document.getElementById(i).innerHTML=="o") {
+             document.getElementById(i).removeEventListener("click", done);
+           }
+         }
+        this.removeEventListener("click", done);
+        this.addEventListener("click", cancel);
+        this.style.backgroundColor="#ccc";
+       }
+     }
+     function cancel(player){
+      this.innerHTML= 'o';
+      for (var i = 0; i <= 8; i++) {
+          document.getElementById(i).style.backgroundColor="#fff";
+          document.getElementById(i).removeEventListener("click", focus);
+          if (document.getElementById(i).innerHTML=="o") {
+          os += i+1+',';
+          document.getElementById(i).addEventListener("click", focus);
+          }
+          document.getElementById(i).removeEventListener("click",done);
+        }
+     }
+     function done(player) {
+      if (this.innerHTML=="x" && this.innerHTML==" ") {
+        this.style.backgroundColor="red";
+      }else{
+        this.innerHTML= 'o';
+      for (var i = 0; i <= 8; i++) {
+          document.getElementById(i).style.backgroundColor="#fff";
+          document.getElementById(i).removeEventListener("click", focus);
+          document.getElementById(i).removeEventListener("click", cancel);
+          if (document.getElementById(i).innerHTML=="o") {
+          os += i+1+',';
+          document.getElementById(i).addEventListener("click", focus);
+          }
+          document.getElementById(i).removeEventListener("click",done);
+        }
+        var idofval=document.getElementById("val");
+        idofval.innerHTML=os;
+        if (os=="1,2,3,") {
+          idofval.innerHTML="winner";
+          document.getElementById(0).style.backgroundColor="green";
+          document.getElementById(1).style.backgroundColor="green";
+          document.getElementById(2).style.backgroundColor="green";
+          document.getElementById("message").style.display="block";
+          document.getElementById("ms").innerHTML="You have won";
+          owons++;
+        }
+        if (os=="4,5,6,") {
+          idofval.innerHTML="winner";
+          document.getElementById(3).style.backgroundColor="green";
+          document.getElementById(4).style.backgroundColor="green";
+          document.getElementById(5).style.backgroundColor="green";
+          document.getElementById("message").style.display="block";
+          document.getElementById("ms").innerHTML="You have won";
+          owons++;
+        }
+        if (os=="1,4,7,") {
+          idofval.innerHTML="winner";
+          document.getElementById(0).style.backgroundColor="green";
+          document.getElementById(3).style.backgroundColor="green";
+          document.getElementById(6).style.backgroundColor="green";
+          document.getElementById("message").style.display="block";
+          document.getElementById("ms").innerHTML="You have won";
+          owons++;
+        }
+        if (os=="2,5,8,") {
+          idofval.innerHTML="winner";
+          document.getElementById(1).style.backgroundColor="green";
+          document.getElementById(4).style.backgroundColor="green";
+          document.getElementById(7).style.backgroundColor="green";
+          document.getElementById("message").style.display="block";
+          document.getElementById("ms").innerHTML="You have won";
+          owons++;
+        }
+        if (os=="3,6,9,") {
+          idofval.innerHTML="winner";
+          document.getElementById(2).style.backgroundColor="green";
+          document.getElementById(5).style.backgroundColor="green";
+          document.getElementById(8).style.backgroundColor="green";
+          document.getElementById("message").style.display="block";
+          document.getElementById("ms").innerHTML="You have won";
+          owons++;
+        }
+        if (os=="1,5,9,") {
+          idofval.innerHTML="winner";
+          document.getElementById(0).style.backgroundColor="green";
+          document.getElementById(4).style.backgroundColor="green";
+          document.getElementById(8).style.backgroundColor="green";
+          document.getElementById("message").style.display="block";
+          document.getElementById("ms").innerHTML="You have won";
+          owons++;
+        }
+        if (os=="3,5,7,") {
+          idofval.innerHTML="winner";
+          document.getElementById(2).style.backgroundColor="green";
+          document.getElementById(4).style.backgroundColor="green";
+          document.getElementById(6).style.backgroundColor="green";
+          document.getElementById("message").style.display="block";
+          document.getElementById("ms").innerHTML="You have won";
+          owons++;
+        }
+        os="";
+        ai();
+      }
+    }
+    function ai(argument) {
+      var em = document.getElementById("em");
+      for(i = 0; i <= 8; i++){
+        if (document.getElementById(i).innerHTML=="x") {
+          whereisai += i+1+',';
+        }
+        if (document.getElementById(i).innerHTML==' ') {
+          placefrai += i+1+',';
+        }
+      }
+      var places=placefrai.split(",");
+      var rmp =whereisai.split(",");
+      document.getElementById(rmp[0]-1).innerHTML=" ";
+      document.getElementById(places[0]-1).innerHTML="x";
+      whereisai="";
+      placefrai="";
+      for(i = 0; i <= 8; i++){
+        if (document.getElementById(i).innerHTML=="x") {
+          whereisai += i+1+',';
+        }
+        if (document.getElementById(i).innerHTML==' ') {
+          placefrai += i+1+',';
+        }
+      }
+      var idofai=document.getElementById("ai");
+      idofai.innerHTML = whereisai;
+      em.innerHTML= placefrai;
+      if (whereisai=="7,8,9,") {
+        idofai.innerHTML="winner";
+        document.getElementById(6).style.backgroundColor="red";
+        document.getElementById(7).style.backgroundColor="red";
+        document.getElementById(8).style.backgroundColor="red";
+        document.getElementById("message").style.display="block";
+        document.getElementById("ms").innerHTML="AI beat you";
+        xwons++;
+      }
+      if (whereisai=="4,5,6,") {
+        idofai.innerHTML="winner";
+        document.getElementById(3).style.backgroundColor="red";
+        document.getElementById(4).style.backgroundColor="red";
+        document.getElementById(5).style.backgroundColor="red";
+        document.getElementById("message").style.display="block";
+        document.getElementById("ms").innerHTML="AI beat you";
+        xwons++;
+      }
+      if (whereisai=="1,4,7,") {
+        idofai.innerHTML="winner";
+        document.getElementById(0).style.backgroundColor="red";
+        document.getElementById(3).style.backgroundColor="red";
+        document.getElementById(6).style.backgroundColor="red";
+        document.getElementById("message").style.display="block";
+        document.getElementById("ms").innerHTML="AI beat you";
+        xwons++;
+      }
+      if (whereisai=="2,5,8,") {
+        idofai.innerHTML="winner";
+        document.getElementById(1).style.backgroundColor="red";
+        document.getElementById(4).style.backgroundColor="red";
+        document.getElementById(7).style.backgroundColor="red";
+        document.getElementById("message").style.display="block";
+        document.getElementById("ms").innerHTML="AI beat you";
+        xwons++;
+      }
+      if (whereisai=="3,6,9,") {
+        idofai.innerHTML="winner";
+        document.getElementById(2).style.backgroundColor="red";
+        document.getElementById(5).style.backgroundColor="red";
+        document.getElementById(8).style.backgroundColor="red";
+        document.getElementById("message").style.display="block";
+        document.getElementById("ms").innerHTML="AI beat you";
+        xwons++;
+      }
+      if (whereisai=="1,5,9,") {
+        idofai.innerHTML="winner";
+        document.getElementById(0).style.backgroundColor="red";
+        document.getElementById(4).style.backgroundColor="red";
+        document.getElementById(8).style.backgroundColor="red";
+        document.getElementById("message").style.display="block";
+        document.getElementById("ms").innerHTML="AI beat you";
+        xwons++;
+      }
+      if (whereisai=="3,5,7,") {
+        idofai.innerHTML="winner";
+        document.getElementById(2).style.backgroundColor="red";
+        document.getElementById(4).style.backgroundColor="red";
+        document.getElementById(6).style.backgroundColor="red";
+        document.getElementById("message").style.display="block";
+        document.getElementById("ms").innerHTML="AI beat you";
+        xwons++;
+      }
+      document.getElementById("tests").innerHTML=rmp[0]-1;
+      document.getElementById("lab").innerHTML=places[0]-1;
+      document.getElementById("xwons").innerHTML=xwons;
+      document.getElementById("owons").innerHTML=owons;
+
+      placefrai="";
+      whereisai="";
+    }
+
+  </script>
+  </html>
