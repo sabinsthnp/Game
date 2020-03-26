@@ -8,14 +8,16 @@
   *{
     padding: 0;
     margin: 0;
+    font-family: cursive;
   }
-  table{
+  .table{
     width: 90%; 
     margin: 5%;
     border:2px solid red;
     border-collapse: collapse;
+    cursor: pointer;
   }
-  td{
+  .table td{
     border:2px solid  #333;
     height: 33vw;
     width: 33vw;
@@ -47,10 +49,21 @@
 </style>
 </head>
 <body>
-  <center>agamebysabinshrestha</center>
+  <center>X & Os</center>
   <div id="message"><p style="height: 10vh;" id="ms">You have won</p>
     <center ><button onclick="start()">Replay</button></center></div>
-    <table>
+
+      <table width="100%">
+        <tr>
+          <td><div id="end">Your wins=</div></td>
+          <td><span id="owons"></span></td>
+
+          <td><div>AI wins=</div></td>
+          <td><span id="xwons"></span></td>
+        </tr>
+      </table>
+
+    <table class="table">
       <tr>
         <td class="cell" id="0" onclick="focus(0)"></td>
         <td class="cell" id="1"> </td>
@@ -66,9 +79,7 @@
         <td class="cell" id="7"> </td>
         <td class="cell" id="8"> </td>
       </tr>
-      <div id="end">your wins=<span id="owons"></span>
-        AI wins=<span id="xwons"></span></div>
-        <button onclick="start()">Reset</button>
+        <div style="text-align: right;"><button onclick="start()">Reset</button></div>
       </table>
       <div style="text-align: center;">values of human:<span id="val"></span></div>
       <div style="text-align: center;">values of ai<span id="ai"></span></div>
@@ -84,6 +95,7 @@
       var xwons=0;
       var placefrai="";
       var whereisai="";
+      var whereisperson="";
       var gameboard;
       var p = 'x';
       var c = 'o';
@@ -174,6 +186,8 @@
             document.getElementById(i).style.backgroundColor="#fff";
             document.getElementById(i).removeEventListener("click", focus);
             if (document.getElementById(i).innerHTML=="o") {
+             document.getElementById(i).removeEventListener("click", done);
+           }if (document.getElementById(i).innerHTML=="x") {
              document.getElementById(i).removeEventListener("click", done);
            }
          }
@@ -290,8 +304,16 @@
       }
       var places=placefrai.split(",");
       var rmp =whereisai.split(",");
-      document.getElementById(rmp[0]-1).innerHTML=" ";
-      document.getElementById(places[0]-1).innerHTML="x";
+      places.pop();
+      rmp.pop();
+      var chosenbyai= rmp[Math.floor(Math.random() * rmp.length)];
+      var chosenplacebyai= places[Math.floor(Math.random() * places.length)];
+      console.log(rmp);
+      console.log(chosenbyai);
+      console.log(chosenplacebyai);
+      console.log(rmp[chosenbyai]);
+      document.getElementById(chosenbyai-1).innerHTML=" ";
+      document.getElementById(chosenplacebyai-1).innerHTML="x";
       whereisai="";
       placefrai="";
       for(i = 0; i <= 8; i++){
@@ -376,6 +398,23 @@
       placefrai="";
       whereisai="";
     }
-
+    function think(argument) {
+      whereisai="";
+      whereisperson="";
+      for(i = 0; i <= 8; i++){
+        if (document.getElementById(i).innerHTML=="x") {
+          whereisai += i+1+',';
+        }
+        if (document.getElementById(i).innerHTML=="o") {
+          whereisperson += i+1+',';
+        }
+        if (whereisperson=='5,6,7,') {
+          chosenplacebyai=4;
+        }
+        
+    }
+    console.log(whereisai);
+    console.log(whereisperson);
+  }
   </script>
   </html>
